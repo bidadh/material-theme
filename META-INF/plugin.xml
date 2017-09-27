@@ -1,0 +1,490 @@
+<idea-plugin>
+  <id>com.chrisrm.idea.MaterialThemeUI</id>
+  <name>Material Theme UI</name>
+  <version>0.8.2</version>
+  <vendor email="chris@hirvi.no" url="https://hirvi.no">Hirvi AS</vendor>
+  <description>
+        This will add the &lt;a href="https://github.com/equinusocio/material-theme"&gt;Material Theme&lt;/a&gt; look to your IDE.&lt;br/&gt;&lt;br/&gt;
+    </description>
+  <idea-version since-build="171.2953.9"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.lang</depends>
+  <depends optional="true" config-file="php.xml">com.jetbrains.php</depends>
+  <depends optional="true">com.jetbrains.twig</depends>
+  <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
+  <resource-bundle>messages.MaterialThemeBundle</resource-bundle>
+  <resource-bundle>messages.FileColorsBundle</resource-bundle>
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="com.chrisrm.idea.MTConfig"/>
+    <applicationService serviceImplementation="com.chrisrm.idea.themes.MTThemeManager"/>
+    <applicationService serviceImplementation="com.chrisrm.idea.icons.tinted.TintedIconsService"/>
+    <applicationConfigurable instance="com.chrisrm.idea.config.MTConfigurable" groupId="appearance" id="com.chrisrm.idea.config"/>
+    <projectViewNodeDecorator implementation="com.chrisrm.idea.tree.MTProjectViewNodeDecorator"/>
+    <editorTabColorProvider implementation="com.chrisrm.idea.tabs.MTEditorTabColor"/>
+    <iconProvider implementation="com.chrisrm.idea.icons.MTHiddenIconProvider" order="first"/>
+    <iconProvider implementation="com.chrisrm.idea.icons.MTFileIconProvider" order="first"/>
+    <bundledColorScheme path="/colors/Material Theme - Lighter"/>
+    <bundledColorScheme path="/colors/Material Theme - Default"/>
+    <bundledColorScheme path="/colors/Material Theme - Palenight"/>
+    <bundledColorScheme path="/colors/Material Theme - Darker"/>
+    <welcomeFrameProvider implementation="com.chrisrm.idea.ui.MTFlatWelcomeFrameProvider" order="FIRST"/>
+    <customScopesProvider implementation="com.chrisrm.idea.config.scope.MTScopeProvider"/>
+    <search.optionContributor implementation="com.chrisrm.idea.config.MTOptionContributor"/>
+    <search.topHitProvider implementation="com.chrisrm.idea.config.MTConfigTopHitProvider"/>
+    <colorSettingsPage implementation="com.chrisrm.idea.config.MTFileColorsPage"/>
+  </extensions>
+  <application-components>
+    <component>
+      <implementation-class>com.chrisrm.idea.themes.MTLafComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.chrisrm.idea.schemes.MTThemesComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.chrisrm.idea.tabs.MTTabsPainterPatcherComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.chrisrm.idea.tabs.MTTabHighlighterComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.chrisrm.idea.icons.MTIconReplacerComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.chrisrm.idea.themes.MTWallpaperComponent</implementation-class>
+    </component>
+  </application-components>
+  <project-components>
+    <component>
+      <implementation-class>com.chrisrm.idea.status.MTStatusBarComponent</implementation-class>
+      <loadForDefaultProject>true</loadForDefaultProject>
+    </component>
+    <component>
+      <implementation-class>com.chrisrm.idea.config.scope.MTScopeComponent</implementation-class>
+      <loadForDefaultProject>true</loadForDefaultProject>
+    </component>
+  </project-components>
+  <actions>
+    <group id="MaterialTheme.ThemeChooser" text="Material Theme Chooser" popup="true" icon="/icons/actions/material-theme.png">
+      <add-to-group group-id="MainToolBar" anchor="last"/>
+      <action id="MTDarkerTheme" class="com.chrisrm.idea.actions.MTDarkerTheme" text="Darker Theme" description="Material Theme - Darker" icon="/icons/actions/theme-darker.png"/>
+      <action id="MTDefaultTheme" class="com.chrisrm.idea.actions.MTDefaultTheme" text="Default Theme" description="Material Theme - Default" icon="/icons/actions/theme-default.png"/>
+      <action id="MTPalenightTheme" class="com.chrisrm.idea.actions.MTPalenightTheme" text="Palenight Theme" description="Material Theme - Palenight" icon="/icons/actions/theme-palenight.png"/>
+      <action id="MTLighterTheme" class="com.chrisrm.idea.actions.MTLighterTheme" text="Lighter Theme" description="Material Theme - Lighter" icon="/icons/actions/theme-lighter.png"/>
+    </group>
+    <group id="MaterialTheme.Panels" text="Panel Options" description="Panel Options" popup="true" icon="/icons/actions/layers.png">
+      <add-to-group group-id="MainToolBar" anchor="last"/>
+      <action class="com.chrisrm.idea.actions.MTContrastAction" id="MTContrastAction" text="Toggle Contrast" icon="/icons/actions/mtContrast.png" description="Toggle Contrast"/>
+      <action id="MTCompactSidebarAction" class="com.chrisrm.idea.actions.MTCompactSidebarAction" text="Toggle Compact Sidebar" description="Toggle Compact Sidebar" icon="/icons/actions/compactSidebar.png"/>
+      <action id="MTHideFileIconsAction" class="com.chrisrm.idea.actions.MTHideFileIconsAction" text="Toggle Hide File Icons" description="Toggle Hide File Icons" icon="/icons/actions/hideFileAction.png"/>
+      <action id="MTCompactStatusBarAction" class="com.chrisrm.idea.actions.MTCompactStatusBarAction" text="Toggle Compact Status Bar" description="Toggle Compact Status Bar" icon="/icons/actions/compactStatusBar.png"/>
+      <action id="MTBiggerTabs" class="com.chrisrm.idea.actions.MTBiggerTabsAction" text="Set recommended tab height" description="Increase tab height to a 50px" icon="/icons/actions/bigTabs.png"/>
+    </group>
+    <group id="MaterialTheme.Accents" text="Accent Colors" description="Set an accent color" popup="true" icon="/icons/actions/accents/accents.png">
+      <add-to-group group-id="MainToolBar" anchor="last"/>
+      <action id="com.chrisrm.idea.actions.accents.MTTurquoiseAccentAction" class="com.chrisrm.idea.actions.accents.MTTurquoiseAccentAction" icon="/icons/actions/accents/accents-turquoise.png" text="Turquoise Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTTomatoAccentAction" class="com.chrisrm.idea.actions.accents.MTTomatoAccentAction" icon="/icons/actions/accents/accents-tomato.png" text="Tomato Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTDaisyAccentAction" class="com.chrisrm.idea.actions.accents.MTDaisyAccentAction" icon="/icons/actions/accents/accent-daisy.png" text="Daisy Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTLimeAccentAction" class="com.chrisrm.idea.actions.accents.MTLimeAccentAction" icon="/icons/actions/accents/accent-lime.png" text="Lime Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTAmethystAccentAction" class="com.chrisrm.idea.actions.accents.MTAmethystAccentAction" icon="/icons/actions/accents/accent-amethyst.png" text="Amethyst Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTBrickAccentAction" class="com.chrisrm.idea.actions.accents.MTBrickAccentAction" icon="/icons/actions/accents/accent-brick.png" text="Brick Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTOrangeAccentAction" class="com.chrisrm.idea.actions.accents.MTOrangeAccentAction" icon="/icons/actions/accents/accent-orange.png" text="Orange Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTAcidLimeAccentAction" class="com.chrisrm.idea.actions.accents.MTAcidLimeAccentAction" icon="/icons/actions/accents/accent-acidlime.png" text="Acid Lime Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTPomegrenateAccentAction" class="com.chrisrm.idea.actions.accents.MTPomegrenateAccentAction" icon="/icons/actions/accents/accent-pomegrenate.png" text="Pomegrenate Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTDodgerBlueAccentAction" class="com.chrisrm.idea.actions.accents.MTDodgerBlueAccentAction" icon="/icons/actions/accents/accent-dodgerblue.png" text="DodgerBlue Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTStrawberryAccentAction" class="com.chrisrm.idea.actions.accents.MTStrawberryAccentAction" icon="/icons/actions/accents/accent-strawberry.png" text="Strawberry Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTTealAccentAction" class="com.chrisrm.idea.actions.accents.MTTealAccentAction" icon="/icons/actions/accents/accent-teal.png" text="Teal Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTIndigoAccentAction" class="com.chrisrm.idea.actions.accents.MTIndigoAccentAction" icon="/icons/actions/accents/accent-indigo.png" text="Indigo Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTSkyAccentAction" class="com.chrisrm.idea.actions.accents.MTSkyAccentAction" icon="/icons/actions/accents/accent-sky.png" text="Sky Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTFuschiaAccentAction" class="com.chrisrm.idea.actions.accents.MTFuschiaAccentAction" icon="/icons/actions/accents/accent-fuschia.png" text="Fuschia Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTAquamarineAccentAction" class="com.chrisrm.idea.actions.accents.MTAquamarineAccentAction" icon="/icons/actions/accents/accent-aquamarine.png" text="Aquamarine Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTCyanAccentAction" class="com.chrisrm.idea.actions.accents.MTCyanAccentAction" icon="/icons/actions/accents/accent-cyan.png" text="Cyan Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTBreakingBadAccentAction" class="com.chrisrm.idea.actions.accents.MTBreakingBadAccentAction" icon="/icons/actions/accents/accent-breakingbad.png" text="Breaking Bad Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTGoldAccentAction" class="com.chrisrm.idea.actions.accents.MTGoldAccentAction" icon="/icons/actions/accents/accent-gold.png" text="Gold Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTGraphiteAccentAction" class="com.chrisrm.idea.actions.accents.MTGraphiteAccentAction" icon="/icons/actions/accents/accent-graphite.png" text="Graphite Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTCoffeeAccentAction" class="com.chrisrm.idea.actions.accents.MTCoffeeAccentAction" icon="/icons/actions/accents/accent-coffee.png" text="Coffee Accent Color" description="Change accent color"/>
+      <action id="com.chrisrm.idea.actions.accents.MTSlateAccentAction" class="com.chrisrm.idea.actions.accents.MTSlateAccentAction" icon="/icons/actions/accents/accent-slate.png" text="Slate Accent Color" description="Change accent color"/>
+    </group>
+    <group id="MaterialTheme.Components" text="Material Components" description="Material Component Options" popup="true" icon="/icons/actions/components.png">
+      <add-to-group group-id="MainToolBar" anchor="last"/>
+      <action id="MTDisableThemeAction" class="com.chrisrm.idea.actions.MTDisableThemeAction" text="Toggle Material Theme" description="Toggle Material Theme" icon="/icons/actions/mtDisableTheme.png"/>
+      <action id="MTDisableComponents" class="com.chrisrm.idea.actions.MTDisableComponentsAction" text="Toggle Material Components" description="Toggle Material Theme Components" icon="/icons/actions/mtComponents.png"/>
+      <action id="MTMaterialIconsAction" class="com.chrisrm.idea.actions.MTMaterialIconsAction" text="Toggle Material Icons" description="Toggle Material Icons" icon="/icons/actions/compile.png"/>
+      <action id="MTToggleProjectViewDecoratorsAction" class="com.chrisrm.idea.actions.MTToggleProjectViewDecoratorsAction" text="Toggle Project View Decorators" description="Toggle Project View Decorators" icon="/icons/actions/mtProjectViewDecorators.png"/>
+      <action id="MTToggleStatusbarIndicatorAction" class="com.chrisrm.idea.actions.MTToggleStatusbarIndicatorAction" text="Toggle Status Bar Indicator" description="Toggle Status Bar Indicator" icon="/icons/actions/mtNoStatus.png"/>
+    </group>
+    <group id="MaterialTheme.Menu" text="Material Theme" popup="true" icon="/icons/actions/material-theme.png">
+      <reference id="MaterialTheme.ThemeChooser"/>
+      <separator/>
+      <reference id="MaterialTheme.Accents"/>
+      <separator/>
+      <reference id="MaterialTheme.Panels"/>
+      <separator/>
+      <reference id="MaterialTheme.Components"/>
+      <add-to-group group-id="ToolsMenu"/>
+      <add-to-group group-id="ChangeScheme" anchor="after" relative-to-action="MaterialTheme.Menu"/>
+    </group>
+  </actions>
+  <change-notes>
+    &lt;html&gt;
+    &lt;b&gt;0.8.0&lt;/b&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Allow customization of file status colors&lt;/li&gt;
+    &lt;li&gt;Fix issue with non material checkboxes&lt;/li&gt;
+    &lt;li&gt;Rewrite Wallpaper component&lt;/li&gt;
+    &lt;li&gt;Fix height of Run/Debug toolbars&lt;/li&gt;
+    &lt;li&gt;More UI Icons&lt;/li&gt;
+    &lt;/ul&gt;
+
+
+    &lt;b&gt;0.7.3.2&lt;/b&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Changed javascript icon&lt;/li&gt;
+    &lt;li&gt;Changed javascript instance member colors&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;b&gt;0.7.3&lt;/b&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Material Checkboxes&lt;/li&gt;
+    &lt;li&gt;Fix issue with file colors (https://github.com/mallowigi/material-theme-jetbrains-eap/issues/105)&lt;/li&gt;
+    &lt;li&gt;Fix issue with line highlight accent (https://github.com/mallowigi/material-theme-jetbrains-eap/issues/104)&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;0.7.2&lt;/b&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Convert old "Bold tabs option" into "bold directories"&lt;/li&gt;
+&lt;li&gt;Tree colors like the sublime theme&lt;/li&gt;
+&lt;li&gt;Selected Tree Line like in the Sublime Theme&lt;/li&gt;
+&lt;li&gt;Set opened folders with accent theme like in Sublime&lt;/li&gt;
+&lt;li&gt;More UI File icons&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;b&gt;0.7.1.2&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Themed My Commits and Merge commits in VCS Log&lt;/li&gt;
+        &lt;li&gt;Better color for Selected Tool Window Buttons&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;0.7.1&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix Hide File Icons&lt;/li&gt;
+        &lt;li&gt;Fix Objective C and Coffeescript colors&lt;/li&gt;
+        &lt;li&gt;Set TabsHeight as scalable for High DPI (https://github.com/ChrisRM/material-theme-jetbrains/issues/399)&lt;/li&gt;
+        &lt;li&gt;Removing bold tabs&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;0.7.0.3&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Changing accent colors now update icons as well (needs close project)&lt;/li&gt;
+        &lt;li&gt;VCS icons&lt;/li&gt;
+        &lt;li&gt;Fix Status Indicator cut on Windows (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/89"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/89&lt;/a&gt;)&lt;/li&gt;
+        &lt;li&gt;Fix Project Icon as accent hoverable (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/88"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/88&lt;/a&gt;)&lt;/li&gt;
+        &lt;li&gt;Revert default font to 12px since it makes the text too big (blur is okay i guess)&lt;/li&gt;
+        &lt;li&gt;Fix unreadable font (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/98"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/98&lt;/a&gt;)&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;0.7.0.2&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix contrast mode not applying (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/84"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/84&lt;/a&gt;)&lt;/li&gt;
+        &lt;li&gt;Fix issues with Action buttons (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/93"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/93&lt;/a&gt;)&lt;/li&gt;
+        &lt;li&gt;Set Roboto default size to 14px (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/87"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/87&lt;/a&gt;)&lt;/li&gt;
+        &lt;li&gt;Fix Custom Tree Indent (&lt;a href="https://github.com/mallowigi/material-theme-jetbrains-eap/issues/92"&gt;https://github.com/mallowigi/material-theme-jetbrains-eap/issues/92&lt;/a&gt;)&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.7.0&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Material Design Spinners&lt;/li&gt;
+        &lt;li&gt;Material Design Comboboxes&lt;/li&gt;
+        &lt;li&gt;Material Design Action Buttons&lt;/li&gt;
+        &lt;li&gt;Add opacity to Tree Selected background&lt;/li&gt;
+        &lt;li&gt;Support for disabled Text Inputs&lt;/li&gt;
+        &lt;li&gt;Custom Accents Support&lt;/li&gt;
+        &lt;li&gt;More UI Icons&lt;/li&gt;
+        &lt;li&gt;Fix Tool window issue &lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.6.0.1&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Disable PHP File Association to make use of custom Psi Icons&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.6.0&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix issue with Merge window&lt;/li&gt;
+        &lt;li&gt;Put the Material Theme Options under Appearance&lt;/li&gt;
+        &lt;li&gt;Add more actions, and regroup menus&lt;/li&gt;
+        &lt;li&gt;Much more UI Icons&lt;/li&gt;
+        &lt;li&gt;Refactor code&lt;/li&gt;
+        &lt;li&gt;CheckStyle and Copyright&lt;/li&gt;
+    &lt;/ul&gt;
+     &lt;b&gt;Version 0.5.3&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Add bigger status bar&lt;/li&gt;
+        &lt;li&gt;Change Material Progress Loader&lt;/li&gt;
+        &lt;li&gt;Make better colors for memory indicator for Darker, Lighter and Palenight&lt;/li&gt;
+        &lt;li&gt;Fix caret issue with lighter themes&lt;/li&gt;
+        &lt;li&gt;Add docker-compose yaml association (thanks @thaffenden)
+        &lt;li&gt;Other bug fixes&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.5.2&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix many color issues with the Lighter theme: Progress bars, Indicator, Autocomplete, Tree foreground color,
+        Notifications colors, breakpoint colors...&lt;/li&gt;
+        &lt;li&gt;Remove None theme&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.5.1&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Material Dialog Headers&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.5.0&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Themed Scrollbars&lt;/li&gt;
+        &lt;li&gt;Material Table Headers&lt;/li&gt;
+        &lt;li&gt;Material Inputs&lt;/li&gt;
+        &lt;li&gt;Material Passwords (and option to show hidden chars)&lt;/li&gt;
+        &lt;li&gt;Material Tabs&lt;/li&gt;
+        &lt;li&gt;Add option to disable Material Theme but leaving icons, tabs, schemes...&lt;/li&gt;
+        &lt;li&gt;Customizable Tab Height&lt;/li&gt;
+        &lt;li&gt;Custom Tree Indents&lt;/li&gt;
+        &lt;li&gt;Better notifications&lt;/li&gt;
+        &lt;li&gt;Themed Dialog headers&lt;/li&gt;
+        &lt;li&gt;More UI Icons&lt;/li&gt;
+        &lt;li&gt;Bug fixes (and possible improvements)&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.4&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Add default font as Roboto&lt;/li&gt;
+        &lt;li&gt;Make options searchable&lt;/li&gt;
+        &lt;li&gt;Tinted Icon implementation&lt;/li&gt;
+        &lt;li&gt;Redesigned folders to suit the MT icons (though help is appreciated)&lt;/li&gt;
+        &lt;li&gt;Added custom file colors&lt;/li&gt;
+        &lt;li&gt;Add theme changer to Quick Switch (Ctrl+~)&lt;/li&gt;
+        &lt;li&gt;More UI Icons&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.3.2&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix issue with Statusbar option not being saved&lt;/li&gt;
+        &lt;li&gt;Add bigger file icons for original ones (sass, php, ruby...)&lt;/li&gt;
+        &lt;li&gt;More file icons: Chef, Cucumber, EJS, Jinja, Freemarker, PHPunits, Typings, Visio, VS&lt;/li&gt;
+        &lt;li&gt;Hide exceptions about IndexOutOfBounds&lt;/li&gt;
+        &lt;li&gt;Show red icon for excluded open files&lt;/li&gt;
+        &lt;li&gt;Remove old PSI icons to use IntelliJ's &lt;/li&gt;
+        &lt;li&gt;Change pin icons (alpha)&lt;/li&gt;
+        &lt;li&gt;Better icons for expand and collapse (alpha)&lt;/li&gt;
+        &lt;li&gt;Fix bad associations&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.3.1&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Changed behavior of Custom Wallpaper to not change custom bg when the checkbox is off&lt;/li&gt;
+        &lt;li&gt;Add option to disable current theme indicator&lt;/li&gt;
+        &lt;li&gt;Fix issue sqlite&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.3&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Themed notifications like MD toasts&lt;/li&gt;
+        &lt;li&gt;Put indicator in Status bar for current theme&lt;/li&gt;
+        &lt;li&gt;Fix issue with composer, Rakefile, plist, aurelia, node... icons&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.2&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;A lot more file type icons&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.1&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix syntax highlight for HOCON, Groovy, Apache, Hibernate and Scala (partly)&lt;/li&gt;
+        &lt;li&gt;More icons: Ansible, Aurelia, CakePHP&lt;/li&gt;
+        &lt;li&gt;Fix issue with light color schemes not being saved&lt;/li&gt;
+        &lt;li&gt;Fix settings not being saved&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.4.0&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Fix #92&lt;/li&gt;
+        &lt;li&gt;Refactor: put selected theme into MTConfig and create ThemeManager&lt;/li&gt;
+        &lt;li&gt;Fix: Do not try to replace all icons, if an icon is not provided use Jetbrains one.&lt;/li&gt;
+        &lt;li&gt;Refactor project: put the selected theme in the MTConfig + better folder structure&lt;/li&gt;
+        &lt;li&gt;Add more icons: Access, Word, Powerpoint, Excel, Audio, Video, Elm, Go, Hack, Julia, Pug, Kotlin, Maya, Markup, Premiere, Powershell, Rake, Riot, Stata, Sublime, Vim&lt;/li&gt;
+        &lt;li&gt;Fix PHP + JS Code Schemes&lt;/li&gt;
+        &lt;li&gt;New: Background image for empty IDE with customization available in options&lt;/li&gt;
+        &lt;li&gt;New: Option to hide file icons in the Project View&lt;/li&gt;
+        &lt;li&gt;New: Option to disable Material Icons&lt;/li&gt;
+        &lt;li&gt;New: Option to disable Project View decorators&lt;/li&gt;
+        &lt;li&gt;New: Option to select compact (and not compact) project view&lt;/li&gt;
+        &lt;li&gt;New icons: Akka, Ada, Android&lt;/li&gt;
+        &lt;li&gt;New UI Icons&lt;/li&gt;
+        &lt;li&gt;Progress indicators&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.3.8.1&lt;/b&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Revert better contrasts as it breaks theme change&lt;/li&gt;
+        &lt;li&gt;Set light theme version of contrast mode (needs to set IntelliJ theme though).&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;b&gt;Version 0.3.8&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Code coverage color&lt;/li&gt;
+            &lt;li&gt;Better breadcrumbs colors&lt;/li&gt;
+            &lt;li&gt;Popup hint backgrounds (alpha)&lt;/li&gt;
+            &lt;li&gt;Themed Smart Completion (Ctrl-Space)&lt;/li&gt;
+            &lt;li&gt;Themed documentation popups&lt;/li&gt;
+            &lt;li&gt;Themed parameter info (Cmd-P)&lt;/li&gt;
+            &lt;li&gt;Better contrast mode, now replace most of the backgrounds, leaving only the menus, editor and current tab&lt;/li&gt;
+            &lt;li&gt;Action for setting contrast mode&lt;/li&gt;
+            &lt;li&gt;Themed tab close button&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;b&gt;Version 0.3.7.2&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fix Python Color schemes&lt;/li&gt;
+            &lt;li&gt;Fix Go Color Schemes&lt;/li&gt;
+            &lt;li&gt;New component to fix python not taking the icons&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;b&gt;Version 0.3.7.1&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fix wrong next occurence icon&lt;/li&gt;
+            &lt;li&gt;Restore accidently deleted modified icon&lt;/li&gt;
+            &lt;li&gt;C and CPP color schemes&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.7&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Add option to set bold tabs&lt;/li&gt;
+            &lt;li&gt;Add toggle options to Search Everything&lt;/li&gt;
+            &lt;li&gt;Change trees collapse and expand icons&lt;/li&gt;
+            &lt;li&gt;Themed IDE icons: Checkout, Project Structure, Back, Forward, History, Up, Down, Step Into, Step Out, Compile, Jars, Library...&lt;/li&gt;
+            &lt;li&gt;Other bug fixes and improvements...&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.6.1&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fix button background not taking the full width&lt;/li&gt;
+            &lt;li&gt;Themed Memory Indicator&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.6&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Add postCSS icon association&lt;/b&gt;
+            &lt;li&gt;Fix Console colors&lt;/li&gt;
+            &lt;li&gt;Align text and menu colors with the original theme&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.5&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Themed Welcome Screen&lt;/li&gt;
+            &lt;li&gt;Themed Progress Bar&lt;/li&gt;
+            &lt;li&gt;Themed Striped Tables&lt;/li&gt;
+            &lt;li&gt;Removed some separator borders&lt;/li&gt;
+            &lt;li&gt;Focused button&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.4.3&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Hopefully fix issue with Rider #17&lt;/li&gt;
+            &lt;li&gt;Fix Ruby Color schemes&lt;/li&gt;
+            &lt;li&gt;Make buttons stand out a bit more anyway&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.4.2&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Add a new setting in the Options to disable/enable the new buttons (and further components) look.&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.4.1&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fix issue with font scale on HiDPI screens (#13). Thanks @vemilyus&lt;/li&gt;
+            &lt;li&gt;Message Bundle&lt;/li&gt;
+            &lt;li&gt;Put the active tab highlighter on the opposite site when tab placement is left or right&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.4&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;New look for buttons (beta)&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.3.3&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Add a new button to remove the MT theme and replace it with Darcula&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.3.2&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fix back issue with custom fonts not applying&lt;/li&gt;
+            &lt;li&gt;Some colors were lost during the 0.3.3 update, hopefully this will fix them&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.3:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Updated color schemes to reflect the Sublime plugin's color schemes&lt;/li&gt;
+            &lt;li&gt;New option: &lt;b&gt;Contrast mode&lt;/b&gt;. This will allow you to apply a higher contrast Look and feel&lt;/li&gt;
+            &lt;li&gt;Allow resetting the Active Tab settings with the default ones&lt;/li&gt;
+            &lt;li&gt;Updated file status colors: modified, added, ignored, conflicts...&lt;/li&gt;
+            &lt;li&gt;Replace the "asterisk" icon with an "edit" material icon&lt;/li&gt;
+            &lt;li&gt;Set Open and closed folders according to open tabs (still buggy)&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.2:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Respect tabs placement setting by drawing the active tab indicator on top/left/right/bottom&lt;/li&gt;
+            &lt;li&gt;
+                &lt;p&gt;New: Settings for customizing the plugin&lt;/p&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;Active tab indicator custom color&lt;/li&gt;
+                    &lt;li&gt;Active tab indicator thickness&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.1:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fixed issue with Tabs in latest EAP&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Version 0.3.0:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;New Set of Icons from the Sublime theme (https://github.com/equinusocio/material-theme)&lt;/li&gt;
+            &lt;li&gt;Palenight Theme&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Fixed in v0.2.4:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Prevent file icons from being assigned to classes, methods, etc. @mjdetullio&lt;/li&gt;
+            &lt;li&gt;Add file association to .yaml files @thaffenden&lt;/li&gt;
+            &lt;li&gt;Separate psd icons from images @Freezystem&lt;/li&gt;
+            &lt;li&gt;Add htpasswd to htaccess group @Freezystem&lt;/li&gt;
+            &lt;li&gt;Add Dart file icon and association @seanjohnite&lt;/li&gt;
+            &lt;li&gt;Set parent scheme of dark themes to Darcula @vsch&lt;/li&gt;
+            &lt;li&gt;Set better color for Parameter hints&lt;/li&gt;
+            &lt;li&gt;Load MT file icons before everything else (fix #292)&lt;/li&gt;
+            &lt;li&gt;Set UITree selected background color to Light Blue as in Windows&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Fixed in v0.2.3:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Adding icons for package.json, gruntfile, gulpfile and webpack&lt;/li&gt;
+            &lt;li&gt;Fix font overriding&lt;/li&gt;
+            &lt;li&gt;Menu border color&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Fixed in v0.2.2:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fixes UI icons for recent versions of platform. @mallowigi&lt;/li&gt;
+            &lt;li&gt;Issue #258 fix crashes on Windows for IntelliJ IDEA 2016.3. @bulenkov&lt;/li&gt;
+            &lt;li&gt;More sensible colors for diffs. @hypnoglow&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Fixed in v0.2.1:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Hopefully a final fix for issue #205, IDEA-157843 and IDEA-156327&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Fixed in v0.2.0:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Improved visibility for diffs on default color scheme. Thanks @marvhock - #208&lt;/li&gt;
+            &lt;li&gt;Hopefully fixes issue #205, IDEA-157843 and IDEA-156327&lt;/li&gt;
+            &lt;li&gt;Merged recent changes made to the platform&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Added in v0.2.0:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;SidePanel background color (Preferences)&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;hr/&gt;
+        &lt;b&gt;Fixed in v0.1.9:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Fails to launch when using Darker or Lighter theme. Thanks @robertfreund - #187&lt;/li&gt;
+            &lt;li&gt;Kotlin syntax highlighting - #153&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Added in v0.1.9:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;File icon: Kotlin - `*.kt`&lt;/li&gt;
+            &lt;li&gt;File icon: Liquid - Shopify templating language - `*.liquid`&lt;/li&gt;
+            &lt;li&gt;File icon: Lua - `*.lua`&lt;/li&gt;
+            &lt;li&gt;File icon: LICENSE files&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;hr/&gt;
+        &lt;b&gt;Fixed in v0.1.8:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;In some cases getVirtualFile() for psi elements can be null. Fixes #172, #175 - @anstarovoyt&lt;/li&gt;
+            &lt;li&gt;Vertical tabs highlight - @Cyberdelia1987&lt;/li&gt;
+            &lt;li&gt;Fixes an error which caused the plugin to misbehave in non-java ide's. See #177&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;b&gt;Added in v0.1.8:&lt;/b&gt;
+        &lt;ul&gt;
+            &lt;li&gt;File icon: React `*.jsx` - #162&lt;/li&gt;
+            &lt;li&gt;File icon: PHTML `*.phtml`&lt;/li&gt;
+            &lt;li&gt;File icon: Gradle `*.gradle` - #140&lt;/li&gt;
+            &lt;li&gt;File icon: Text `*.txt`&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/html&gt;
+    
+    </change-notes>
+</idea-plugin>
